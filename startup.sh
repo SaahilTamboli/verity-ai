@@ -1,32 +1,19 @@
 #!/bin/bash
+
 echo "Starting deployment script..."
 
 # Navigate to the correct directory
 cd /home/site/wwwroot
-echo "Current directory: $(pwd)"
 
-# Create and activate virtual environment using full path
-python -m venv antenv
-echo "Virtual environment created"
+# Create virtual environment
+/usr/local/bin/python3 -m venv antenv
 
-# Activate virtual environment
+# Activate virtual environment (using . instead of source)
 . antenv/bin/activate
-echo "Virtual environment activated"
 
-# Upgrade pip
-python -m pip install --upgrade pip
-
-# Install dependencies with verbose output
-echo "Installing dependencies..."
-pip install --no-cache-dir -r requirements.txt --verbose
-
-# List installed packages
-echo "Installed packages:"
-pip list
+# Install dependencies
+pip install -r requirements.txt
 
 # Start the application
-echo "Starting FastAPI application..."
 cd app
-export PYTHONPATH=/home/site/wwwroot
-export PORT=8000
-python -m uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1
+PYTHONPATH=/home/site/wwwroot antenv/bin/python -m uvicorn main:app --host 0.0.0.0 --port 8000
