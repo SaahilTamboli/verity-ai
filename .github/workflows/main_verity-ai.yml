@@ -35,3 +35,10 @@ jobs:
         slot-name: 'Production'
         startup-command: 'sh startup.sh'  # Changed to use startup script
         package: .  # Changed to deploy entire directory
+
+    - name: Create deployment package
+      run: |
+        echo "Creating deployment package..."
+        chmod +x startup.sh
+        zip -r deploy.zip . -x "*.git*" "*.venv*"
+        echo "Package created"
