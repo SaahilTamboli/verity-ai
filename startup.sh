@@ -1,19 +1,24 @@
 #!/bin/bash
+echo "Starting deployment script..."
+
+# Navigate to the correct directory
+cd /home/site/wwwroot
 echo "Current directory: $(pwd)"
-echo "Listing directory contents:"
-ls -la
 
-echo "Creating and activating virtual environment..."
-python -m venv antenv
-source antenv/bin/activate
+# Create and activate virtual environment using full path
+python3 -m venv /home/site/wwwroot/antenv
+echo "Virtual environment created"
 
-echo "Installing requirements..."
-pip install -r requirements.txt
+# Use . instead of source for better compatibility
+. /home/site/wwwroot/antenv/bin/activate
+echo "Virtual environment activated"
 
-echo "Starting application..."
+# Install dependencies
+echo "Installing dependencies..."
+pip install --no-cache-dir -r requirements.txt
+
+# Start the application
+echo "Starting FastAPI application..."
 cd app
-echo "Current directory before starting app: $(pwd)"
-echo "Listing app directory contents:"
-ls -la
-
-uvicorn main:app --host 0.0.0.0 --port 8000
+export PYTHONPATH=/home/site/wwwroot
+/home/site/wwwroot/antenv/bin/uvicorn main:app --host 0.0.0.0 --port 8000
