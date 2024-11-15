@@ -19,3 +19,4 @@ pypdf
 tiktoken
 pandas
 numpy
+itsdangerous==2.1.2

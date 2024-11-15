@@ -6,19 +6,27 @@ cd /home/site/wwwroot
 echo "Current directory: $(pwd)"
 
 # Create and activate virtual environment using full path
-python3 -m venv /home/site/wwwroot/antenv
+python -m venv antenv
 echo "Virtual environment created"
 
-# Use . instead of source for better compatibility
-. /home/site/wwwroot/antenv/bin/activate
+# Activate virtual environment
+. antenv/bin/activate
 echo "Virtual environment activated"
 
-# Install dependencies
+# Upgrade pip
+python -m pip install --upgrade pip
+
+# Install dependencies with verbose output
 echo "Installing dependencies..."
-pip install --no-cache-dir -r requirements.txt
+pip install --no-cache-dir -r requirements.txt --verbose
+
+# List installed packages
+echo "Installed packages:"
+pip list
 
 # Start the application
 echo "Starting FastAPI application..."
 cd app
 export PYTHONPATH=/home/site/wwwroot
-/home/site/wwwroot/antenv/bin/uvicorn main:app --host 0.0.0.0 --port 8000
+export PORT=8000
+uvicorn main:app --host 0.0.0.0 --port $PORT --workers 4
